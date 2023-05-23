@@ -42,7 +42,6 @@ def main() -> None:
     set_seed(training_args.seed)
     args = Configure.Get(training_args.cfg)
     training_args.report_to = ['tensorboard']
-    import pdb; pdb.set_trace()
 
     if 'checkpoint-???' in args.bert.location:
         args.bert.location = get_last_checkpoint(
@@ -99,6 +98,7 @@ def main() -> None:
             task_args = Configure.Get(arg_path)
             task_args.bert = args.bert
             print('task_args.bert.location:', task_args.bert.location)
+            import pdb; pdb.set_trace()
             task_raw_datasets_split: datasets.DatasetDict = datasets.load_dataset(
                 path=task_args.dataset.loader_path,
                 cache_dir=task_args.dataset.data_store_path)
