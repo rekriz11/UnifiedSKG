@@ -99,8 +99,6 @@ def main() -> None:
             task_args.bert = args.bert
             print('task_args.bert.location:', task_args.bert.location)
 
-            import pdb; pdb.set_trace()
-
             if task_args.dataset.name in ['unified_ner_ontonotes']:
                 with open(task_args.dataset.data_store_path + 'train.json') as f:
                     train = []
