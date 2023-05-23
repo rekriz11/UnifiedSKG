@@ -98,12 +98,19 @@ def main() -> None:
             task_args = Configure.Get(arg_path)
             task_args.bert = args.bert
             print('task_args.bert.location:', task_args.bert.location)
-            import pdb; pdb.set_trace()
+
+            #if task_args.dataset.name in ['unified_ner_ontonotes']:
+            #    train = load_dataset("json", data_files=task_args.dataset.data_store_path + 'train.json')
+            #    dev = load_dataset("json", data_files=task_args.dataset.data_store_path + 'dev.json')
+            #    test = load_dataset("json", data_files=task_args.dataset.data_store_path + 'test.json')
+            #    task_seq2seq_dataset_split = DatasetDict({"train": train, "validation": dev, "test": test})
+            #else:
             task_raw_datasets_split: datasets.DatasetDict = datasets.load_dataset(
                 path=task_args.dataset.loader_path,
                 cache_dir=task_args.dataset.data_store_path)
             task_seq2seq_dataset_split: tuple = utils.tool.get_constructor(task_args.seq2seq.constructor)(task_args).\
                 to_seq2seq(task_raw_datasets_split, cache_root)
+            import pdb; pdb.set_trace()
 
             meta_tuning_data[arg_path] = task_seq2seq_dataset_split
 
