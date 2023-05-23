@@ -26,10 +26,10 @@ logger = logging.getLogger(__name__)
 def load_ner_data(task_args, split):
     with open(task_args.dataset.data_store_path + split + '.json') as f:
         split = []
-        for split in f:
-            instance = json.loads(split)
+        for line in f:
+            instance = json.loads(line)
             new_instance = {'text_in': instance['src'], 'text_out': instance['tgt'], 'entity_types': instance['entity_types']}
-            train.append(new_instance)
+            split.append(new_instance)
     return split
 
 def main() -> None:
