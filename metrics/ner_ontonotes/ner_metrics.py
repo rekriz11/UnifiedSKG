@@ -261,8 +261,9 @@ def span_f1(targets, predictions, data_format='paolini_copy_brackets'):
     #print("\n\ntp: {}\nfp: {}\nfn: {}".format(true_positives, false_positives, false_negatives))
     #import pdb; pdb.set_trace()
 
-  if 'copy_bracket' in data_format or data_format == 'extractive_sentinel_tag':
-    print("With {}:\nGold errors: {} out of {} spans, Pred errors: {} out of {} spans".format(data_format, all_gold_errors, all_gold_spans, all_pred_errors, all_pred_spans))
+  #if 'copy_bracket' in data_format or data_format == 'extractive_sentinel_tag':
+  #   print("With {}:\nGold errors: {} out of {} spans, Pred errors: {} out of {} spans".format(data_format, 
+  #   all_gold_errors, all_gold_spans, all_pred_errors, all_pred_spans))
   precision, recall, f1_measure = compute_f1_metrics(
       sum(true_positives.values()), sum(false_positives.values()),
       sum(false_negatives.values()))

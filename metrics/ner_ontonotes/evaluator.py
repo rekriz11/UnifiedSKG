@@ -32,8 +32,6 @@ class EvaluateTool(object):
         self.args = args
 
     def evaluate(self, preds, golds, section):
-        summary = {}
         gold_inferreds = [item["seq_out"] for item in golds]
         results = span_f1(preds, gold_inferreds)
-        summary['all_ex'] = results['span_f1']
-        return summary
+        return results
