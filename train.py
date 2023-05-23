@@ -28,7 +28,7 @@ def load_ner_data(task_args, split):
         split = []
         for line in f:
             instance = json.loads(line)
-            new_instance = {'text_in': instance['src'], 'text_out': instance['tgt'], 'entity_types': instance['entity_types']}
+            new_instance = {'text_in': instance['src'], 'seq_out': instance['tgt'], 'entity_types': instance['entity_types']}
             split.append(new_instance)
     return split
 
