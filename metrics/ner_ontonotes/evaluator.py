@@ -2,8 +2,7 @@
 from collections import defaultdict
 
 import numpy as np
-from metrics.unified.evaluator import eval_ex_match
-
+from metrics.ner_ontonotes.ner_metrics import span_f1
 
 # this function is adapt from tapex
 '''def evaluate_example(_predict_str: str, _ground_str: str):
@@ -35,11 +34,6 @@ class EvaluateTool(object):
     def evaluate(self, preds, golds, section):
         summary = {}
         gold_inferreds = [item["seq_out"] for item in golds]
-
-        ex_match = []
-        for pred, gold_result in zip(preds, gold_inferreds):
-            ex_match.append(eval_ex_match(pred, gold_result))
-            # ex_match.append(sorted(pred.split(', ')) == sorted(gold_result.split(', ')))
-
-        summary["all_ex"] = float(np.mean(ex_match))
+        results = span_f1(preds, gold_inferreds)
+        summary['all_ex'] = results['span_f1']
         return summary
