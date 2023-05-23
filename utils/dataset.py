@@ -17,7 +17,6 @@ class TokenizedDataset(Dataset):
         raw_item = self.seq2seq_dataset[index]
 
         if raw_item["text_in"]:
-            import pdb; pdb.set_trace()
             ###################
             # With text input #
             ###################
