@@ -25,13 +25,15 @@ logger = logging.getLogger(__name__)
 ## Loads NER data directly
 def load_ner_data(task_args, split):
     with open(task_args.dataset.data_store_path + split + '.json') as f:
-        split = []
-        for line in f:
+        split_data = []
+        for idx, line in enumerate(f):
+            if split == 'test' and idx > 100:
+                break
             instance = json.loads(line)
             struct = 'List of entity types: {}'.format(' | '.join(instance['entity_types']))
             new_instance = {'text_in': instance['src'], 'seq_out': instance['tgt'], 'struct_in': struct}
-            split.append(new_instance)
-    return split
+            split_data.append(new_instance)
+    return split_data
 
 def main() -> None:
     os.environ[
