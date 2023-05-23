@@ -22,6 +22,15 @@ from utils.training_arguments import WrappedSeq2SeqTrainingArguments
 # in transformers==4.10.1 during our work.
 logger = logging.getLogger(__name__)
 
+## Loads NER data directly
+def load_ner_data(task_args, split):
+    with open(task_args.dataset.data_store_path + split + '.json') as f:
+        split = []
+        for split in f:
+            instance = json.loads(split)
+            new_instance = {'text_in': instance['src'], 'text_out': instance['tgt'], 'entity_types' = instance['entity_types']}
+            train.append(new_instance)
+    return split
 
 def main() -> None:
     os.environ[
@@ -100,18 +109,10 @@ def main() -> None:
             print('task_args.bert.location:', task_args.bert.location)
 
             if task_args.dataset.name in ['unified_ner_ontonotes']:
-                with open(task_args.dataset.data_store_path + 'train.json') as f:
-                    train = []
-                    for line in f:
-                        train.append(json.loads(line))
-                with open(task_args.dataset.data_store_path + 'dev.json') as f:
-                    dev = []
-                    for line in f:
-                        dev.append(json.loads(line))
-                with open(task_args.dataset.data_store_path + 'test.json') as f:
-                    test = []
-                    for line in f:
-                        test.append(json.loads(line))
+                ## Loads NER data directly
+                train = load_ner_data(task_args, 'train')
+                dev = load_ner_data(task_args, 'dev')
+                test = load_ner_data(task_args, 'test')
                 task_seq2seq_dataset_split = (train, dev, test)
             else:
                 task_raw_datasets_split: datasets.DatasetDict = datasets.load_dataset(
