@@ -1,4 +1,4 @@
-import logging
+import logging, json
 import os
 import time
 
@@ -99,18 +99,26 @@ def main() -> None:
             task_args.bert = args.bert
             print('task_args.bert.location:', task_args.bert.location)
 
-            #if task_args.dataset.name in ['unified_ner_ontonotes']:
-            #    train = load_dataset("json", data_files=task_args.dataset.data_store_path + 'train.json')
-            #    dev = load_dataset("json", data_files=task_args.dataset.data_store_path + 'dev.json')
-            #    test = load_dataset("json", data_files=task_args.dataset.data_store_path + 'test.json')
-            #    task_seq2seq_dataset_split = DatasetDict({"train": train, "validation": dev, "test": test})
-            #else:
-            task_raw_datasets_split: datasets.DatasetDict = datasets.load_dataset(
-                path=task_args.dataset.loader_path,
-                cache_dir=task_args.dataset.data_store_path)
-            import pdb; pdb.set_trace()
-            task_seq2seq_dataset_split: tuple = utils.tool.get_constructor(task_args.seq2seq.constructor)(task_args).\
-                to_seq2seq(task_raw_datasets_split, cache_root)
+            if task_args.dataset.name in ['unified_ner_ontonotes']:
+                with open(task_args.dataset.data_store_path + 'train.json') as f:
+                    train = []
+                    for line in f:
+                        train.append(json.loads(line))
+                with open(task_args.dataset.data_store_path + 'dev.json') as f:
+                    dev = []
+                    for line in f:
+                        dev.append(json.loads(line))
+                with open(task_args.dataset.data_store_path + 'test.json') as f:
+                    test = []
+                    for line in f:
+                        test.append(json.loads(line))
+                task_seq2seq_dataset_split = (train, dev, test)
+            else:
+                task_raw_datasets_split: datasets.DatasetDict = datasets.load_dataset(
+                    path=task_args.dataset.loader_path,
+                    cache_dir=task_args.dataset.data_store_path)
+                task_seq2seq_dataset_split: tuple = utils.tool.get_constructor(task_args.seq2seq.constructor)(task_args).\
+                    to_seq2seq(task_raw_datasets_split, cache_root)
             
 
             meta_tuning_data[arg_path] = task_seq2seq_dataset_split
