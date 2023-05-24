@@ -27,8 +27,6 @@ def load_ner_data(task_args, split):
     with open(task_args.dataset.data_store_path + split + '.json') as f:
         split_data = []
         for idx, line in enumerate(f):
-            if split == 'dev' and idx > 100:
-                break
             instance = json.loads(line)
             struct = 'List of entity types: {}'.format(' | '.join(instance['entity_types']))
             new_instance = {'text_in': instance['src'], 'seq_out': instance['tgt'], 'struct_in': struct}
